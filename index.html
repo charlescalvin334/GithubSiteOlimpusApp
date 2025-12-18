@@ -4,59 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OlimpusAD | Reklamların Katili</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Fira+Code&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00ff66; --bg: #030303; --text: #ffffff; }
+        
+        /* Ekranın siyah kalmasını engelleyen temel ayarlar */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; cursor: none !important; }
-        body { background-color: var(--bg); color: var(--text); overflow: hidden; -webkit-user-select: none; user-select: none; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
 
         /* Arkaplan Matrix Kodları */
-        #code-canvas { position: fixed; inset: 0; z-index: 1; opacity: 0.1; pointer-events: none; }
-        .glow { position: fixed; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(0, 255, 102, 0.05) 0%, transparent 70%); top: -10%; right: -10%; z-index: 0; }
+        #code-canvas { position: fixed; inset: 0; z-index: 1; opacity: 0.15; pointer-events: none; }
+        .glow { position: fixed; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(0, 255, 102, 0.05) 0%, transparent 70%); top: -10%; right: -10%; z-index: 0; }
 
         /* RGB BUTON ANIMASYONU */
         @keyframes rgb-shadow {
             0% { box-shadow: 0 0 20px #ff0000; border-color: #ff0000; }
-            20% { box-shadow: 0 0 20px #ffff00; border-color: #ffff00; }
-            40% { box-shadow: 0 0 20px #00ff00; border-color: #00ff00; }
-            60% { box-shadow: 0 0 20px #00ffff; border-color: #00ffff; }
-            80% { box-shadow: 0 0 20px #0000ff; border-color: #0000ff; }
+            33% { box-shadow: 0 0 20px #00ff00; border-color: #00ff00; }
+            66% { box-shadow: 0 0 20px #0000ff; border-color: #0000ff; }
             100% { box-shadow: 0 0 20px #ff0000; border-color: #ff0000; }
         }
 
         /* Navigasyon */
-        nav { position: fixed; top: 0; width: 100%; padding: 40px 10%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        nav { position: absolute; top: 0; width: 100%; padding: 40px 10%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .logo { font-weight: 900; font-size: 28px; letter-spacing: -2px; }
-        .logo span { color: var(--primary); text-shadow: 0 0 10px rgba(0,255,102,0.5); }
+        .logo span { color: var(--primary); }
 
-        /* Hero */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; z-index: 10; }
-        h1 { font-size: clamp(50px, 12vw, 120px); font-weight: 900; letter-spacing: -7px; line-height: 0.85; margin-bottom: 30px; }
-        p { color: #888; font-size: 20px; max-width: 600px; margin-bottom: 50px; font-weight: 500; }
+        /* Hero Bölümü - Opacity 1 yaparak siyah ekranı bitiriyoruz */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; z-index: 10; opacity: 1 !important; }
+        h1 { font-size: clamp(45px, 10vw, 110px); font-weight: 900; letter-spacing: -6px; line-height: 0.9; margin-bottom: 25px; }
+        p { color: #888; font-size: clamp(16px, 2vw, 20px); max-width: 600px; margin-bottom: 40px; }
 
-        /* Buton Grubu */
-        .btn-group { display: flex; gap: 20px; }
-        .btn { padding: 24px 60px; border-radius: 20px; font-weight: 800; font-size: 18px; transition: 0.3s; border: 3px solid transparent; text-decoration: none; pointer-events: auto !important; }
+        /* Butonlar */
+        .btn-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        .btn { padding: 20px 50px; border-radius: 18px; font-weight: 800; font-size: 18px; transition: 0.3s; border: 3px solid transparent; text-decoration: none; pointer-events: auto !important; }
         
-        /* ŞİMDİ İNDİR RGB BUTON */
         .btn-primary { background: #fff; color: #000; }
         .btn-primary:hover { 
             background: #000; color: #fff;
             animation: rgb-shadow 1.5s infinite linear;
-            transform: scale(1.1) translateY(-5px);
+            transform: scale(1.05) translateY(-5px);
         }
 
         .btn-secondary { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
 
         /* Stats */
-        .stats { display: flex; gap: 100px; margin-top: 100px; }
-        .stat-item h3 { font-size: 60px; font-weight: 900; letter-spacing: -3px; }
-        .stat-item p { font-size: 12px; color: #444; font-weight: 800; letter-spacing: 3px; }
+        .stats { display: flex; gap: clamp(30px, 8vw, 100px); margin-top: 60px; }
+        .stat-item h3 { font-size: clamp(35px, 5vw, 60px); font-weight: 900; letter-spacing: -2px; }
+        .stat-item p { font-size: 10px; color: #444; font-weight: 800; letter-spacing: 2px; }
 
         /* Custom Cursor */
         #cursor { position: fixed; width: 10px; height: 10px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: difference; }
-        #follower { position: fixed; width: 45px; height: 45px; border: 2px solid var(--primary); border-radius: 50%; pointer-events: none; z-index: 9998; transition: 0.1s ease-out; }
+        #follower { position: fixed; width: 40px; height: 40px; border: 2px solid var(--primary); border-radius: 50%; pointer-events: none; z-index: 9998; transition: 0.1s ease-out; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -68,41 +66,41 @@
 
     <nav>
         <div class="logo">Olimpus<span>AD</span></div>
-        <div style="font-size: 12px; font-weight: 800; color: #444; letter-spacing: 1px;">PREMIUM AD-BLOCKER</div>
+        <div style="font-size: 11px; font-weight: 800; color: #555;">v3.0 ENGINE</div>
     </nav>
 
     <section class="hero">
-        <div style="background: rgba(0,255,102,0.1); color: var(--primary); padding: 10px 25px; border-radius: 100px; font-size: 13px; font-weight: 800; margin-bottom: 30px; border: 1px solid rgba(0,255,102,0.2);">OLIMPUS AD ENGINE v3.0</div>
-        <h1>Reklamları <br> <span style="color:var(--primary)">Yok Edin.</span></h1>
-        <p>OlimpusAD, internetteki tüm reklamları ve izleyicileri tek tıkla temizleyen dünyanın en hızlı engelleme motorudur.</p>
+        <div style="background: rgba(0,255,102,0.1); color: var(--primary); padding: 8px 20px; border-radius: 100px; font-size: 12px; font-weight: 800; margin-bottom: 25px; border: 1px solid rgba(0,255,102,0.2);">REKLAMLARI YOK ET</div>
+        <h1>İnterneti <br> <span style="color:var(--primary)">Temizleyin.</span></h1>
+        <p>OlimpusAD ile web sitelerindeki tüm reklamları, izleyicileri ve sinir bozucu pencereleri saniyeler içinde engelleyin.</p>
 
         <div class="btn-group">
             <a href="Olimpus.exe" download class="btn btn-primary">Şimdi İndir!</a>
-            <a href="#" class="btn btn-secondary">Protokoller</a>
+            <a href="#" class="btn btn-secondary">Lisans Al</a>
         </div>
 
         <div class="stats">
-            <div class="stat-item"><h3 id="kill">0</h3><p>REKLAM ÖLDÜ</p></div>
-            <div class="stat-item"><h3 id="safe">0</h3><p>GÜVENLİ VERİ</p></div>
+            <div class="stat-item"><h3 id="kill">0</h3><p>ENGELLEDİ</p></div>
+            <div class="stat-item"><h3 id="safe">0</h3><p>VERİ TASARRUFU</p></div>
         </div>
     </section>
 
     <script>
-        // Matrix Akan Kodlar (OlimpusAD Temalı)
+        // Matrix Efekti
         const canvas = document.getElementById('code-canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
         
-        let isHacked = false, buffer = "";
-        const codes = ["BLOCK.AD", "CLEAN.TRAFFIC", "KILL.TRACKER", "OLIMPUS.CORE", "DNS.SECURE", "BYPASS.NO"];
+        const codes = ["BLOCK", "KILL", "CLEAN", "OLIMPUS", "SECURE"];
         let particles = [];
-        for(let i=0; i<40; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, text: codes[Math.floor(Math.random()*codes.length)], s: Math.random()*0.5+0.2 });
+        for(let i=0; i<30; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, text: codes[Math.floor(Math.random()*codes.length)], s: Math.random()*0.4+0.1 });
 
         function draw() {
             ctx.clearRect(0,0,canvas.width, canvas.height);
-            ctx.font = "12px 'Fira Code'";
+            ctx.font = "11px monospace";
             particles.forEach(p => {
-                ctx.fillStyle = isHacked ? "rgba(255,0,0,0.3)" : "rgba(0, 255, 102, 0.15)";
+                ctx.fillStyle = "rgba(0, 255, 102, 0.15)";
                 ctx.fillText(p.text, p.x, p.y);
                 p.y -= p.s;
                 if(p.y < 0) p.y = canvas.height;
@@ -111,41 +109,30 @@
         }
         draw();
 
-        // Mouse Takip
+        // Cursor
         const cursor = document.getElementById('cursor'), follower = document.getElementById('follower');
         document.addEventListener('mousemove', e => {
             cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
-            follower.style.left = (e.clientX - 22) + 'px'; follower.style.top = (e.clientY - 22) + 'px';
+            follower.style.left = (e.clientX - 20) + 'px'; follower.style.top = (e.clientY - 20) + 'px';
         });
 
-        // Easter Eggs
-        window.addEventListener('keydown', e => {
-            buffer += e.key.toLowerCase();
-            if(buffer.includes("malware")) { 
-                isHacked = true; document.body.style.filter = "invert(1) hue-rotate(180deg)";
-            }
-            if(buffer.includes("olimpus")) { 
-                isHacked = false; document.body.style.filter = "none"; buffer = "";
-            }
-        });
-
-        // Sayaçlar
+        // Sayaçlar (Hemen başlasın diye timeout kısalttım)
         function animateValue(id, end, duration) {
-            let obj = document.getElementById(id), start = 0;
-            let step = (t) => {
+            let obj = document.getElementById(id), start = null;
+            const step = (t) => {
                 if (!start) start = t;
                 let progress = Math.min((t - start) / duration, 1);
                 let val = Math.floor(progress * end);
-                obj.innerText = val >= 1000000000 ? (val/1000000000).toFixed(1) + "B+" : val.toLocaleString();
+                obj.innerText = val >= 1000000 ? (val/1000000).toFixed(1) + "M+" : val.toLocaleString();
                 if (progress < 1) requestAnimationFrame(step);
             };
             requestAnimationFrame(step);
         }
         
         setTimeout(() => {
-            animateValue("kill", 1245080, 2000);
-            animateValue("safe", 5000000000, 2500);
-        }, 500);
+            animateValue("kill", 850420, 1500);
+            animateValue("safe", 2400000, 2000);
+        }, 100);
 
         document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
