@@ -6,10 +6,11 @@
     <title>Olimpus Guard | Yerli Sistem Muhafızı</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #0071E3; --primary-hover: #005BB7; --text: #1d1d1f; --bg: #ffffff; --gray: #86868b; --dark: #0d1117; }
+        :root { --primary: #0071E3; --text: #1d1d1f; --bg: #ffffff; --gray: #86868b; --dark: #0d1117; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; cursor: none !important; }
         body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
+        /* Arkaplan Efekti */
         #code-canvas { position: fixed; inset: 0; z-index: 1; opacity: 0.12; pointer-events: none; }
         
         /* Cursors */
@@ -28,32 +29,22 @@
         h1 { font-size: clamp(35px, 7vw, 75px); font-weight: 800; letter-spacing: -3px; line-height: 1.05; margin-bottom: 20px; }
         .btn-group { display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap; justify-content: center; }
         
-        /* ÖZEL İNDİR BUTONU EFEKTİ */
-        .btn { padding: 18px 40px; border-radius: 16px; text-decoration: none; font-weight: 700; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 16px; border: none; display: inline-block; position: relative; z-index: 101; pointer-events: auto !important; }
-        
+        /* Butonlar - Tıklama Alanı Optimize Edildi */
+        .btn { padding: 18px 35px; border-radius: 14px; text-decoration: none; font-weight: 700; transition: 0.3s; font-size: 16px; border: none; display: inline-block; position: relative; z-index: 101; pointer-events: auto !important; }
         .btn-primary { background: var(--primary); color: white; }
-        
-        /* HOVER (ÜSTÜNE GELİNCE) DEĞİŞİM */
-        .btn-primary:hover { 
-            background: var(--primary-hover); 
-            transform: translateY(-8px) scale(1.05); 
-            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.4);
-            letter-spacing: 0.5px;
-        }
-
         .btn-secondary { background: #f2f2f7; color: #000; }
-        .btn-secondary:hover { background: #e5e5ea; transform: translateY(-5px); }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
         /* İndirme Paneli */
         #download-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 500000; }
         .modal-card { background: white; width: 95%; max-width: 500px; padding: 40px; border-radius: 30px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.3); pointer-events: auto; }
         .download-item { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
         
-        .dl-btn { background: var(--primary); color: white; padding: 10px 15px; border-radius: 8px; font-size: 13px; text-decoration: none; font-weight: 700; transition: 0.3s; }
-        .dl-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
+        /* Direkt Dosyadan İndirme Butonları */
+        .dl-btn { background: var(--primary); color: white; padding: 10px 15px; border-radius: 8px; font-size: 13px; text-decoration: none; font-weight: 700; z-index: 500001; pointer-events: auto; }
         
-        .pip-box { background: var(--dark); color: #00ff00; padding: 15px; border-radius: 12px; font-family: 'Fira Code', monospace; font-size: 12px; text-align: left; margin-top: 10px; border: 1px solid #333; }
-        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 28px; color: var(--gray); font-weight: bold; cursor: none !important; padding: 10px; z-index: 500002; pointer-events: auto; }
+        .pip-box { background: var(--dark); color: #00ff00; padding: 15px; border-radius: 12px; font-family: 'Fira Code', monospace; font-size: 12px; text-align: left; margin-top: 10px; }
+        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 28px; color: var(--gray); font-weight: bold; padding: 10px; z-index: 500002; pointer-events: auto; }
 
         @keyframes shake { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(-3px, 3px); } 75% { transform: translate(3px, -3px); } }
     </style>
@@ -72,20 +63,20 @@
     <div id="download-modal">
         <div class="modal-card">
             <span class="close-modal" onclick="toggleModal()">&times;</span>
-            <h2 style="margin-bottom: 20px; letter-spacing: -1px; color:#000;">Hemen İndir</h2>
+            <h2 style="margin-bottom: 20px; letter-spacing: -1px;">Siteden İndir</h2>
             
             <div class="download-item">
-                <div style="text-align:left;"><h4>Windows Uygulaması</h4><p style="font-weight:700; color:#000;">Olimpus.exe</p></div>
-                <a href="./Olimpus.exe" download="Olimpus.exe" class="dl-btn">İndir</a>
+                <div style="text-align:left;"><h4>Uygulama</h4><p style="font-weight:700;">Olimpus.exe</p></div>
+                <a href="./Olimpus.exe" download="Olimpus.exe" class="dl-btn">Hemen İndir</a>
             </div>
 
             <div class="download-item">
-                <div style="text-align:left;"><h4>Python Kaynak Kodu</h4><p style="font-weight:700; color:#000;">Olimpus.py</p></div>
-                <a href="./Olimpus.py" download="Olimpus.py" class="dl-btn">İndir</a>
+                <div style="text-align:left;"><h4>Python Script</h4><p style="font-weight:700;">Olimpus.py</p></div>
+                <a href="./Olimpus.py" download="Olimpus.py" class="dl-btn">Hemen İndir</a>
             </div>
 
             <div style="text-align: left; margin-top: 15px;">
-                <h4 style="color:var(--gray); font-size: 11px; margin-bottom: 5px; font-weight:800;">KURULUM KOMUTU</h4>
+                <h4 style="color:var(--gray); font-size: 11px; margin-bottom: 5px;">PY İÇİN GEREKLİ KÜTÜPHANE</h4>
                 <div class="pip-box">pip install PyQt6</div>
             </div>
         </div>
@@ -93,18 +84,18 @@
 
     <div id="main-content">
         <section class="hero">
-            <div style="background:#e8f3ff; color:var(--primary); padding:8px 20px; border-radius:100px; font-size:12px; font-weight:800; margin-bottom:20px; letter-spacing:1px;">YERLİ YAZILIM GÜCÜ</div>
+            <div style="background:#e8f3ff; color:var(--primary); padding:8px 20px; border-radius:100px; font-size:12px; font-weight:800; margin-bottom:20px;">YERLİ SİSTEM MUHAFIZI</div>
             <h1>Dijital Dünyanın <br> <span style="color:var(--primary)">Zırhlı Koruması.</span></h1>
-            <p>Olimpus Guard ile tanışın. Sisteminizi yavaşlatmadan, en yüksek koruma kalkanını devreye alın.</p>
+            <p>Olimpus Guard ile sisteminizi zararlı yazılımlardan koruyun. Hafif, hızlı ve tamamen güvenli.</p>
 
             <div class="btn-group">
                 <button onclick="toggleModal()" class="btn btn-primary">Şimdi İndir!</button>
                 <a href="https://github.com/charlescalvin334/OlimpusGuard" target="_blank" class="btn btn-secondary">GitHub Projesi</a>
             </div>
 
-            <div style="display: flex; gap: 50px; margin-top: 60px;">
-                <div style="text-align: center;"><h3 id="stat-threat" style="font-size: 45px; font-weight: 800; color: var(--primary); letter-spacing:-2px;">0</h3><p style="font-size: 10px; font-weight: 800; color: var(--gray); letter-spacing:1px;">ENGELLEDİ</p></div>
-                <div style="text-align: center;"><h3 id="stat-process" style="font-size: 45px; font-weight: 800; color: var(--primary); letter-spacing:-2px;">0</h3><p style="font-size: 10px; font-weight: 800; color: var(--gray); letter-spacing:1px;">DENETİM</p></div>
+            <div style="display: flex; gap: 40px; margin-top: 50px;">
+                <div style="text-align: center;"><h3 id="stat-threat" style="font-size: 40px; font-weight: 800; color: var(--primary);">0</h3><p style="font-size: 10px; font-weight: 800; color: var(--gray);">ENGELLEDİ</p></div>
+                <div style="text-align: center;"><h3 id="stat-process" style="font-size: 40px; font-weight: 800; color: var(--primary);">0</h3><p style="font-size: 10px; font-weight: 800; color: var(--gray);">DENETİM</p></div>
             </div>
         </section>
     </div>
@@ -115,7 +106,7 @@
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         let isHacked = false, isTurbo = false, buffer = "";
 
-        const codeLines = ["Olimpus.Guard", "Shield.Active", "System.OK", "Scanning..."];
+        const codeLines = ["Olimpus.Guard", "Shield.Active", "System.Scan", "Safe.Boot"];
         let particles = [];
         for(let i=0; i<40; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, text: codeLines[Math.floor(Math.random()*codeLines.length)], s: Math.random()*0.3+0.1 });
 
@@ -123,7 +114,7 @@
             ctx.clearRect(0,0,canvas.width, canvas.height);
             ctx.font = "10px 'Fira Code'";
             particles.forEach(p => {
-                ctx.fillStyle = isHacked ? "rgba(255,0,0,0.5)" : "rgba(0,113,227,0.15)";
+                ctx.fillStyle = isHacked ? "rgba(255,0,0,0.4)" : "rgba(0,113,227,0.12)";
                 ctx.fillText(p.text, p.x, p.y);
                 p.y -= isTurbo ? p.s*15 : p.s;
                 if(p.y < 0) p.y = canvas.height;
